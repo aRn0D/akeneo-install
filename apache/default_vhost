@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+        ServerName [URL]
+        ServerAlias www.[URL]
+
+        DocumentRoot [ROOT_DIR]/web
+        <Directory [ROOT_DIR]/web>
+                AllowOverride All
+                Order allow,deny
+                Allow from all
+                Require all granted
+        </Directory>
+
+        ErrorLog [ROOT_LOG]/error.log
+        CustomLog [ROOT_LOG]/access.log combined
+</VirtualHost>
