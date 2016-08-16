@@ -1,0 +1,4 @@
+alias sf="app/console"
+alias selenium="/path/to/selenium.sh"
+alias disxdebug="sudo php5dismod xdebug; /etc/init.d/apache2 restart"
+alias enxdebug="sudo php5enmod xdebug; /etc/init.d/apache2 restart"
