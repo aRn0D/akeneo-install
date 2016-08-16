@@ -8,7 +8,7 @@ APP=$1
 ROOT_APP=$2/$APP
 
 # Change it manually if you want to store somewhere else
-ROOT_LOG=$ROOT_INSTALLER/../logs/$APP
+ROOT_LOG=$ROOT_INSTALLER/../../logs/$APP
 
 
 if [ ! -d "$ROOT_LOG" ]; then
