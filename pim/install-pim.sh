@@ -12,7 +12,7 @@ cd $ROOT/$APP
 
 echo "Cloning EE"
 git clone git@github.com:akeneo/pim-enterprise-dev.git .
-git remote add fork git@github.com:aRn0D/pim-enterprise-dev.git
+git remote set-url origin --push git@github.com:aRn0D/pim-enterprise-dev.git
 git checkout $BRANCH
 
 echo "Installing dependencies"
@@ -29,13 +29,12 @@ sed -i "s#database_name: pim_$APP#database_name: pim_$APP\_behat#" app/config/pa
 echo "    installer_data: PimEnterpriseInstallerBundle:minimal" | sudo tee --append app/parameters_test.yml app/config/parameters_test.yml
 
 if [ "$STORAGE" = "odm" ]; then
-echo "toto"
     composer require doctrine/mongodb-odm-bundle
     sed -i 's/\( *\)\/\/ \(new Doctrine\\Bundle\\MongoDBBundle\\DoctrineMongoDBBundle.*\)/\1\2/' app/AppKernel.php
 
     echo "    mongodb_server: 'mongodb://localhost:27017'" | sudo tee --append app/config/parameters.yml
-    echo "    mongodb_database: 'pim_$APP'" | sudo tee --append app/parameters_test.yml app/config/parameters.yml
-    echo "    pim_catalog_product_storage_driver: doctrine/mongodb-odm" | sudo tee --append app/parameters_test.yml app/config/parameters.yml
+    echo "    mongodb_database: 'pim_$APP'" | sudo tee --append app/config/parameters.yml
+    echo "    pim_catalog_product_storage_driver: doctrine/mongodb-odm" | sudo tee --append app/config/parameters.yml
 
     echo "    mongodb_database: 'pim_"$APP"_behat'" | sudo tee --append app/parameters_test.yml app/config/parameters_test.yml
 fi
@@ -44,6 +43,11 @@ echo "Installing database"
 app/console pim:install --force
 app/console pim:install --force -e test
 
+echo "Configuring Behat"
+cp behat.yml.dist behat.yml
+sed -i "s#http://akeneo-pim-enterprise-behat.local/#http://$APP-behat.local/#" app/config/parameters.yml
+
+echo "Configuring CE Git settings"
 cd vendor/akeneo/pim-community-dev
-git remote add fork git@github.com:aRn0D/pim-enterprise-dev.git
+git remote set-url origin --push git@github.com:aRn0D/pim-community-dev.git
 git checkout $BRANCH
