@@ -1,0 +1,4 @@
+ROOT_LOG=/home/arnaud/www/akeneo/pim/logs
+GITHUB_USER=aRn0D
+DATABASE_USER=pim
+DATABASE_PASSWORD=pim

@@ -2,6 +2,10 @@
 
 # Example : install-pim.sh pee 1.5 /path/to/ odm
 
+REAL_SCRIPT=$(readlink -f $0)
+ROOT_INSTALLER=$(dirname $REAL_SCRIPT)
+. $ROOT_INSTALLER"/install.cfg"
+
 
 APP=$1
 BRANCH=$2
@@ -12,7 +16,7 @@ cd $ROOT/$APP
 
 echo "Cloning EE"
 git clone git@github.com:akeneo/pim-enterprise-dev.git .
-git remote set-url origin --push git@github.com:aRn0D/pim-enterprise-dev.git
+git remote set-url origin --push git@github.com:$GITHUB_USER/pim-enterprise-dev.git
 git checkout $BRANCH
 
 echo "Installing dependencies"
@@ -21,8 +25,8 @@ composer install --no-interaction
 echo "Editing configuration"
 cp app/config/parameters.yml.dist app/config/parameters.yml
 sed -i "s#database_name:     akeneo_pim#database_name: pim_$APP#" app/config/parameters.yml
-sed -i "s#database_user:     akeneo_pim#database_user: pim#" app/config/parameters.yml
-sed -i "s#database_password: akeneo_pim#database_password: pim#" app/config/parameters.yml
+sed -i "s#database_user:     akeneo_pim#database_user: $DATABASE_USER#" app/config/parameters.yml
+sed -i "s#database_password: akeneo_pim#database_password: $DATABASE_PASSWORD#" app/config/parameters.yml
 
 cp app/config/parameters.yml app/config/parameters_test.yml
 sed -i "s#database_name: pim_$APP#database_name: pim_$APP\_behat#" app/config/parameters_test.yml
@@ -53,7 +57,7 @@ sed -i "s#me <me@akeneo.com>#Arnaud Langlade <arnaud.langlade@akeneo.com>#" .php
 
 echo "Configuring CE Git settings"
 cd vendor/akeneo/pim-community-dev
-git remote set-url origin --push git@github.com:aRn0D/pim-community-dev.git
+git remote set-url origin --push git@github.com:$GITHUB_USER/pim-community-dev.git
 git checkout $BRANCH
 
 echo "Configuring PhpSpec"
