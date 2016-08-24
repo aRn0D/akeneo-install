@@ -47,7 +47,18 @@ echo "Configuring Behat"
 cp behat.yml.dist behat.yml
 sed -i "s#http://akeneo-pim-enterprise-behat.local/#http://$APP-behat.local/#" app/config/parameters.yml
 
+echo "Configuring PhpSpec"
+cp .phpspec/class.tpl.dist .phpspec/class.tpl
+sed -i "s#me <me@akeneo.com>#Arnaud Langlade <arnaud.langlade@akeneo.com>#" .phpspec/class.tpl
+
 echo "Configuring CE Git settings"
 cd vendor/akeneo/pim-community-dev
 git remote set-url origin --push git@github.com:aRn0D/pim-community-dev.git
 git checkout $BRANCH
+
+echo "Configuring PhpSpec"
+cp .phpspec/class.tpl.dist .phpspec/class.tpl
+sed -i "s#me <me@akeneo.com>#Arnaud Langlade <arnaud.langlade@akeneo.com>#" .phpspec/class.tpl
+
+echo "Installing dependencies"
+composer install --no-interaction
